@@ -1,0 +1,13 @@
+node_modules/
+**/node_modules/
+**/dist/
+.env
+.env.*
+!.env.example
+.DS_Store
+coverage/
+*.log
+.taste-skill/
+
+# TypeScript incremental build cache
+*.tsbuildinfo

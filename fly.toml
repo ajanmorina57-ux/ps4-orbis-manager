@@ -1,0 +1,38 @@
+# Replace this with a globally unique Fly app name before running fly launch.
+app = "orbis-manager-api-change-me"
+primary_region = "fra"
+kill_signal = "SIGTERM"
+kill_timeout = 60
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "8080"
+  # Replace with the exact deployed Vercel origin before launch.
+  WEB_ORIGIN = "https://your-orbis-manager.vercel.app"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [[http_service.checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "20s"
+    method = "GET"
+    path = "/healthz"
+    headers = { X-Forwarded-Proto = "https" }
+
+[processes]
+  app = "npm run start --workspace @orbis/server"
+
+[[restart]]
+  policy = "on-failure"
+  retries = 5
+  processes = ["app"]
